@@ -1,5 +1,12 @@
 import { useState } from "react"
 
+interface ResponseData {
+	username?: string,
+	numRepos?: number
+	totalForks?: number,
+	languages?: { [key: string]: number },
+}
+
 async function getData(user: string) {
   let response = await fetch('http://localhost:3000', {
     method: "POST",
@@ -16,7 +23,7 @@ async function getData(user: string) {
 export default function SearchUser() {
 
   const [username, setUsername] = useState("seantomburke")
-  const [data, setData] = useState({})
+  const [data, setData] = useState({} as ResponseData)
 
   return (
     <>
@@ -49,7 +56,26 @@ export default function SearchUser() {
         <button type="submit">Submit</button>
       </form>
 
-      <p>{JSON.stringify(data, null, 4)}</p>
+      {
+        data['username'] ? <p><b>Username:</b> {data['username']}</p> : ''
+      }
+      {
+        data['numRepos'] ? <p><b>Number of Repos:</b> {data['numRepos']}</p> : ''
+      }
+      {
+        data['totalForks'] ? <p><b>Total Number of Forks:</b> {data['totalForks']}</p> : ''
+      }
+      {
+        data['languages'] ?
+        <>
+          <p><b>Favorite Languages:</b></p>
+          <ol>
+            {Object.entries(data['languages']).map((value) => 
+              <li>{value[0]}: {value[1]}</li>
+            )}
+          </ol>
+        </> : ''
+      }
     </>
   )
 }
