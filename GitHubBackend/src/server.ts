@@ -22,6 +22,7 @@ interface ResponseData {
 	username: string,
 	numRepos: number
 	totalForks: number,
+	totalStars: number,
 	languages: { [key: string]: number },
 }
 
@@ -59,12 +60,19 @@ app.post("/", async (request: Request, response: Response) => {
 		totalForks += count;
 	});
 
+	const starCounts = publicRepos.map((repo) => repo.stargazers_count).map((count) => count ? count : 0);
+	let totalStars = 0;
+	starCounts.forEach((count) => {
+		totalStars += count;
+	});
+
 
 	const responseData: ResponseData = {
 		username: username,
 		numRepos: num_public_repos + num_private_repos,
 		languages: languageCount,
-		totalForks: totalForks
+		totalForks: totalForks,
+		totalStars: totalStars
 	}
 
 	console.log(JSON.stringify(responseData));

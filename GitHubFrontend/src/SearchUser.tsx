@@ -4,6 +4,7 @@ interface ResponseData {
 	username?: string,
 	numRepos?: number
 	totalForks?: number,
+  totalStars?: number,
 	languages?: { [key: string]: number },
 }
 
@@ -66,12 +67,15 @@ export default function SearchUser() {
         data['totalForks'] ? <p><b>Total Number of Forks:</b> {data['totalForks']}</p> : ''
       }
       {
+        data['totalStars'] ? <p><b>Total Number of Stargazers:</b> {data['totalStars']}</p> : ''
+      }
+      {
         data['languages'] ?
         <>
           <p><b>Favorite Languages:</b></p>
           <ol>
             {Object.entries(data['languages']).map((value) => 
-              <li>{value[0]}: {value[1]}</li>
+              <li key={value[0]}>{value[0]}: {value[1]}</li>
             )}
           </ol>
         </> : ''
