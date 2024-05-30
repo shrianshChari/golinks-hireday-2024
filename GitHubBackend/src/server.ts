@@ -1,10 +1,16 @@
 import { Octokit } from "octokit";
 import * as dotenv from 'dotenv';
 import express, { Express, Request, Response } from "express";
+import cors from "cors";
+import bodyParser from 'body-parser';
 
 dotenv.config()
 
 const app: Express = express();
+
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const port = process.env.PORT || 3000;
 
@@ -20,11 +26,8 @@ interface ResponseData {
 }
 
 
-app.get("/", async (request: Request, response: Response) => {
-	console.log(request.body);
-
-	// const username: string = request.body.username;
-	const username = "seantomburke";
+app.post("/", async (request: Request, response: Response) => {
+	const username: string = request.body.username;
 
 	const user = await octokit.request("GET /users/{username}", {
 		username: username
